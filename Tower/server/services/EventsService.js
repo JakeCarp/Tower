@@ -28,8 +28,22 @@ class EventsService {
     } else if (event.isCanceled) {
       throw new BadRequest('You Cannot Edit a Canceled Event')
     }
-    const update = await dbContext.Events.findOneAndUpdate({ _id: eventData.id }, eventData, { new: true })
-    return update
+    await dbContext.Events.findOneAndUpdate({ _id: eventData.id }, eventData, { new: true })
+  }
+
+  async attend(eventId) {
+    const event = await this.getById(eventId)
+    event.capacity--
+    if (event.capacity < 0) {
+      throw new BadRequest('This Event is Full')
+    }
+    await dbContext.Events.findOneAndUpdate({ _id: eventId }, event, { new: true })
+  }
+
+  async unattend(eventId) {
+    const event = await this.getById(eventId)
+    event.capacity++
+    await dbContext.Events.findOneAndUpdate({ _id: eventId }, event, { new: true })
   }
 
   async cancel(eventId, userId) {
