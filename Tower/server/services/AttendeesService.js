@@ -1,5 +1,6 @@
 import { dbContext } from '../db/DbContext'
 import { Forbidden } from '../utils/Errors'
+import { commentsService } from './CommentsService'
 import { eventsService } from './EventsService'
 
 class AttendeesService {
@@ -14,6 +15,7 @@ class AttendeesService {
     const attendee = await dbContext.Attendees.create(attendeeData)
     await attendee.populate('account')
     await attendee.populate('event')
+    commentsService.toggleCreatorAttending(attendee.accountId, true)
     await eventsService.attend(attendee.eventId)
     return attendee
   }
@@ -24,6 +26,7 @@ class AttendeesService {
       throw new Forbidden('You Cannot Cancel For Someone Else')
     }
     await dbContext.Attendees.findByIdAndDelete(attendeeId)
+    await commentsService.toggleCreatorAttending(userId, false)
     await eventsService.unattend(attendee.eventId)
   }
 }

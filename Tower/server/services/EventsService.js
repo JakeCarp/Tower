@@ -28,7 +28,8 @@ class EventsService {
     } else if (event.isCanceled) {
       throw new BadRequest('You Cannot Edit a Canceled Event')
     }
-    await dbContext.Events.findOneAndUpdate({ _id: eventData.id }, eventData, { new: true })
+    const update = await dbContext.Events.findOneAndUpdate({ _id: eventData.id }, eventData)
+    return update
   }
 
   async attend(eventId) {
