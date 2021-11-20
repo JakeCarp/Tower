@@ -1,7 +1,26 @@
-<template></template>
+<template>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-3">
+        <event />
+      </div>
+      <div class="col-3">
+        <event />
+      </div>
+      <div class="col-3">
+        <event />
+      </div>
+      <div class="col-3">
+        <event />
+      </div>
+    </div>
+  </div>
+</template>
 
 <script>
+import Event from '../components/Event.vue'
 export default {
+  components: { Event },
   name: 'Home'
 }
 </script>
