@@ -1,8 +1,19 @@
 <template>
-  <header>
+  <header class="container-fluid sticky-top">
+    <div class="justify-content-end">
+      <button
+        title="navigation menu"
+        aria-describedby="navigation menu"
+        data-bs-toggle="offcanvas"
+        data-bs-target="#offcanvas-nav"
+        class="btn btn-primary nav-button m-3"
+      >
+        <i class="mdi mdi-menu"></i>
+      </button>
+    </div>
     <Navbar />
   </header>
-  <main>
+  <main class="bg-dark">
     <router-view />
   </main>
   <footer>

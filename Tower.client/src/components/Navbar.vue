@@ -1,97 +1,126 @@
 <template>
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-3">
-    <router-link class="navbar-brand d-flex" :to="{ name: 'Home' }">
-    </router-link>
-    <button
-      class="navbar-toggler"
-      type="button"
-      data-bs-toggle="collapse"
-      data-bs-target="#navbarText"
-      aria-controls="navbarText"
-      aria-expanded="false"
-      aria-label="Toggle navigation"
-    >
-      <span class="navbar-toggler-icon" />
-    </button>
-    <div class="collapse navbar-collapse" id="navbarText">
+  <div
+    class="offcanvas offcanvas-end bg-dark"
+    tabindex="-1"
+    id="offcanvas-nav"
+    aria-labelledby="offcanvasLabel"
+  >
+    <div class="offcanvas-header">
+      <div
+        class="navbar-brand text-success lighten-30 selectable"
+        @click="routeTo('home')"
+      >
+        Tower
+      </div>
+      <button
+        type="button"
+        class="btn-close btn-close-white text-reset"
+        data-bs-dismiss="offcanvas"
+        aria-label="Close"
+      ></button>
+    </div>
+    <div class="my-2 my-lg-0 px-3" v-if="user.isAuthenticated">
+      <div class="selectable">
+        <img :src="user.picture" alt="user photo" height="40" class="rounded" />
+        <span class="mx-3 text-success lighten-30">{{ user.name }}</span>
+      </div>
+    </div>
+    <div class="offcanvas-body">
       <ul class="navbar-nav me-auto">
         <li>
-          <router-link
-            :to="{ name: 'About' }"
+          <button
+            @click="routeTo('about')"
             class="btn text-success lighten-30 selectable text-uppercase"
           >
             About
-          </router-link>
+          </button>
+        </li>
+        <li v-if="user.isAuthenticated">
+          <button
+            class="btn text-success lighten-30 selectable text-uppercase"
+            data-bs-toggle="modal"
+            data-bs-target="#createEventModal"
+          >
+            Create Event
+          </button>
+        </li>
+        <li v-if="user.isAuthenticated">
+          <button
+            @click="routeTo('account')"
+            class="btn text-success lighten-30 selectable text-uppercase"
+          >
+            Manage Account
+          </button>
+        </li>
+        <li>
+          <button
+            class="
+              btn
+              selectable
+              text-success
+              lighten-30
+              text-uppercase
+              my-2 my-lg-0
+            "
+            @click="login"
+            v-if="!user.isAuthenticated"
+          >
+            Login
+          </button>
+          <button
+            v-else
+            class="
+              btn
+              selectable
+              text-success
+              lighten-30
+              text-uppercase
+              my-2 my-lg-0
+              text-danger
+            "
+            @click="logout"
+          >
+            <i class="mdi mdi-logout"></i>
+            logout
+          </button>
         </li>
       </ul>
-      <span class="navbar-text">
-        <button
-          class="
-            btn
-            selectable
-            text-success
-            lighten-30
-            text-uppercase
-            my-2 my-lg-0
-          "
-          @click="login"
-          v-if="!user.isAuthenticated"
-        >
-          Login
-        </button>
-
-        <div class="dropdown my-2 my-lg-0" v-else>
-          <div
-            class="dropdown-toggle selectable"
-            data-bs-toggle="dropdown"
-            aria-expanded="false"
-            id="authDropdown"
-          >
-            <img
-              :src="user.picture"
-              alt="user photo"
-              height="40"
-              class="rounded"
-            />
-            <span class="mx-3 text-success lighten-30">{{ user.name }}</span>
-          </div>
-          <div
-            class="dropdown-menu p-0 list-group w-100"
-            aria-labelledby="authDropdown"
-          >
-            <router-link :to="{ name: 'Account' }">
-              <div class="list-group-item list-group-item-action hoverable">
-                Manage Account
-              </div>
-            </router-link>
-            <div
-              class="
-                list-group-item list-group-item-action
-                hoverable
-                text-danger
-              "
-              @click="logout"
-            >
-              <i class="mdi mdi-logout"></i>
-              logout
-            </div>
-          </div>
-        </div>
-      </span>
     </div>
-  </nav>
+  </div>
+  <CreateEvent />
 </template>
 
 <script>
 import { AuthService } from '../services/AuthService'
 import { AppState } from '../AppState'
 import { computed } from 'vue'
+import { useRouter } from 'vue-router'
+import { Offcanvas } from 'bootstrap'
 export default {
   setup() {
+    const router = useRouter()
     return {
+      router,
+      account: computed(() => AppState.account),
       user: computed(() => AppState.user),
       async login() {
         AuthService.loginWithPopup()
+      },
+      async routeTo(routeStr) {
+        Offcanvas.getOrCreateInstance(document.getElementById('offcanvas-nav')).toggle()
+        if (routeStr == 'about') {
+          router.push({
+            name: 'About'
+          })
+        } else if (routeStr == 'home') {
+          router.push({
+            name: 'Home'
+          })
+        } else {
+          router.push({
+            name: 'Account'
+          })
+        }
       },
       async logout() {
         AuthService.logout({ returnTo: window.location.origin })

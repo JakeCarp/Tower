@@ -3,8 +3,11 @@ import { BadRequest, Forbidden } from '../utils/Errors'
 
 class EventsService {
   async getAll(query = {}) {
-    const events = await dbContext.Events.find(query).populate('creator')
-    return events
+    const page = query.page || 1
+    delete query.page
+    const totalPages = Math.ceil(await dbContext.Events.count() / 20)
+    const events = await dbContext.Events.find(query).populate('creator').limit(20).skip((page - 1) * 20)
+    return { results: events, page, totalPages }
   }
 
   async getById(id) {
