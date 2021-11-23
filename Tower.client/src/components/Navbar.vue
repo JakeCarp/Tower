@@ -13,6 +13,8 @@
         Tower
       </div>
       <button
+        title="close navbar"
+        aria-describedby="close navbar"
         type="button"
         class="btn-close btn-close-white text-reset"
         data-bs-dismiss="offcanvas"
@@ -27,16 +29,19 @@
     </div>
     <div class="offcanvas-body">
       <ul class="navbar-nav me-auto">
-        <li>
+        <!-- <li>
           <button
+          
             @click="routeTo('about')"
             class="btn text-success lighten-30 selectable text-uppercase"
           >
             About
           </button>
-        </li>
+        </li> -->
         <li v-if="user.isAuthenticated">
           <button
+            title="create event"
+            aria-describedby="create event"
             class="btn text-success lighten-30 selectable text-uppercase"
             data-bs-toggle="modal"
             data-bs-target="#createEventModal"
@@ -46,6 +51,8 @@
         </li>
         <li v-if="user.isAuthenticated">
           <button
+            title="manage account"
+            aria-describedby="manage account"
             @click="routeTo('account')"
             class="btn text-success lighten-30 selectable text-uppercase"
           >
@@ -54,6 +61,8 @@
         </li>
         <li>
           <button
+            aria-describedby="login"
+            title="login"
             class="
               btn
               selectable
@@ -68,6 +77,8 @@
             Login
           </button>
           <button
+            title="logout"
+            aria-describedby="logout"
             v-else
             class="
               btn

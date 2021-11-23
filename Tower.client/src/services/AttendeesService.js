@@ -11,6 +11,7 @@ class AttendeesService {
         }
         const res = await api.post('api/attendees', body)
         logger.log(res.data)
+        AppState.activeEvent.capacity--
         eventService.getAttendees(eventId)
         accountService.getAttendance(accountId)
     }
@@ -19,6 +20,7 @@ class AttendeesService {
         logger.log('unattended')
         accountService.getAttendance()
         eventService.getAttendees(eventId)
+        AppState.activeEvent.capacity++
     }
 }
 export const attendeesService = new AttendeesService()

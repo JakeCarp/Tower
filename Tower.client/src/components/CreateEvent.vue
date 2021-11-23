@@ -150,12 +150,12 @@ export default {
       eventData,
       async create() {
         try {
-          await eventService.createEvent(eventData.value)
+          const event = await eventService.createEvent(eventData.value)
           Pop.toast('Event Created', 'success')
           router.push({
             name: 'Event',
             params: {
-              id: eventData.id
+              id: event.id
             }
           })
           eventData = {}

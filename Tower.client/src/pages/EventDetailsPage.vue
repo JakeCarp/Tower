@@ -29,6 +29,8 @@
             class="row p-3"
           >
             <button
+              title="Click to attend"
+              aria-describedby="Click to attend"
               @click="toggleAttend()"
               v-if="!accountAttendance.find((a) => a.eventId === eventObj.id)"
               class="btn btn-outline-success lighten-30"
@@ -36,6 +38,8 @@
               Attend <i class="mdi mdi-human"></i>
             </button>
             <button
+              title="click to unattend"
+              aria-describedby="click to unnattend"
               @click="
                 toggleAttend(
                   accountAttendance.find((a) => a.eventId === eventObj.id).id
@@ -56,10 +60,18 @@
           v-if="eventObj.creatorId === account.id && !eventObj.isCanceled"
           class="col-12"
         >
-          <button class="btn btn-outline-danger" @click="cancelEvent">
+          <button
+            title="cancel event"
+            aria-describedby="cancel event"
+            class="btn btn-outline-danger"
+            @click="cancelEvent"
+          >
             Cancel Event
           </button>
           <button
+            title="edit event"
+            aria
+            aria-describedby="edit event"
             class="btn btn-outline-warning ms-4"
             data-bs-toggle="modal"
             data-bs-target="#editEventModal"

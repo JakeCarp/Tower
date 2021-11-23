@@ -41,12 +41,10 @@ class EventService {
     }
 
     async editEvent(eventData) {
-        const index = AppState.events.indexOf(e => e.id === eventData.id)
+        const index = AppState.events.findIndex(e => e.id === eventData.id)
         const update = await api.put('/api/events/' + eventData.id, eventData)
         logger.log(update)
         AppState.activeEvent = new Event(update.data)
-        AppState.events = AppState.events.splice(index, 1, new Event(update.data))
-        
     }
 
     async cancelEvent(id) {

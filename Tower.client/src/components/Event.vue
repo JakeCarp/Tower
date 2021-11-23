@@ -9,7 +9,7 @@
       alt="event cover image"
       aria-describedby="event cover image"
     />
-    <div class="card-img-overlay col-12 d-flex align-items-end">
+    <div class="card-img-overlay col-12 d-flex align-items-end p-5">
       <div class="blur d-flex row">
         <h5 class="card-title col-12 event-text p-0 m-0">
           {{ eventObj.name }}
