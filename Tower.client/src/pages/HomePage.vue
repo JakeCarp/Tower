@@ -1,20 +1,17 @@
 <template>
   <div class="container-fluid">
     <div class="row bg-dark">
-      <div class="col-12">
-        <h3>Tower</h3>
-      </div>
-      <div class="col-12 p-3">
-        <div class="card border border-primary p-3 bg-dark">
-          <h5>Get Ahead of the Scalpers.</h5>
-          <h5>Reserve your spot now.</h5>
-          <h5>Real events for real people.</h5>
-        </div>
+      <div class="card border border-primary p-3 bg-dark">
+        <h5>Get Ahead of the Scalpers.</h5>
+        <h5>Reserve your spot now.</h5>
+        <h5>Real events for real people.</h5>
       </div>
       <div class="col-12">
         <div class="row justify-content-between card bg-dark">
           <div class="card-body">
             <button
+              title="Filter All"
+              aria-describedby="Filter All"
               @click="getAll('all')"
               :class="
                 eventFilter === 'all'
@@ -25,6 +22,8 @@
               All
             </button>
             <button
+              title="Filter Concerts"
+              aria-describedby="Filter Concerts"
               @click="getAll('concert')"
               :class="
                 eventFilter === 'concert'
@@ -35,6 +34,8 @@
               Concerts
             </button>
             <button
+              title="Filter Conventions"
+              aria-describedby="Filter Conventions"
               @click="getAll('convention')"
               :class="
                 eventFilter === 'convention'
@@ -45,6 +46,8 @@
               Conventions
             </button>
             <button
+              title="Filter Sports"
+              aria-describedby="Filter Sports"
               @click="getAll('sport')"
               :class="
                 eventFilter === 'sport'
@@ -55,6 +58,8 @@
               Sports
             </button>
             <button
+              title="Filter Digital"
+              aria-describedby="Filter Digital"
               @click="getAll('digital')"
               :class="
                 eventFilter === 'digital'
@@ -65,6 +70,8 @@
               Digital
             </button>
             <button
+              title="Filter Exhibits"
+              aria-describedby="Filter Exhibits"
               @click="getAll('exhibit')"
               :class="
                 eventFilter === 'exhibit'

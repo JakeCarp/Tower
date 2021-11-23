@@ -1,4 +1,6 @@
 import { AppState } from "../AppState"
+import {  AttendeeAccount } from "../models/Attendee"
+import { Comment } from "../models/Comment"
 import { Event } from "../models/Event"
 import { logger } from "../utils/Logger"
 import { api } from "./AxiosService"
@@ -25,18 +27,38 @@ class EventService {
             }
         
     }
+
+    async getById(id) {
+        const res = await api.get('/api/events/' + id)
+        logger.log(res.data)
+        AppState.activeEvent = new Event(res.data)
+    }
     async createEvent(eventData) {
         const res = await api.post('/api/events', eventData)
         logger.log(res.data)
         AppState.events.unshift(new Event(res.data))
+        AppState.activeEvent = res.data.id
     }
 
     async editEvent(eventData) {
         const index = AppState.events.indexOf(e => e.id === eventData.id)
         const update = await api.put('/api/events/' + eventData.id, eventData)
-        AppState.events.splice(index, 1, update)
+        AppState.events.splice(index, 1, new Event(update))
         
     }
+
+    async getAttendees(id) {
+        const res = await api.get('api/events/' + id + '/attendees')
+        logger.log(res.data)
+        AppState.attendees = res.data.map(a => new AttendeeAccount(a))
+    }
+
+    async getComments(id) {
+        const res = await api.get('api/events/' + id + '/comments')
+        logger.log(res.data)
+        AppState.comments = res.data.map(c => new Comment(c))
+    }
+   
 }
 
 export const eventService = new EventService()

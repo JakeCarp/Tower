@@ -5,9 +5,7 @@ import { eventsService } from './EventsService'
 
 class AttendeesService {
   async getAll(query) {
-    const attendees = await dbContext.Attendees.find(query)
-      .populate('account')
-      .populate('event')
+    const attendees = await dbContext.Attendees.find(query).populate('account').populate('event')
     return attendees
   }
 

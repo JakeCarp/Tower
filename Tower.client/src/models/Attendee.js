@@ -27,7 +27,7 @@ export class AttendeeAccount extends Attendee {
     constructor(data) {
         super(data)
         this.accountId = data.account.id
+        this.picture = data.account.picture
         this.name = data.account.name
-        this.picture - data.account.picture
     }
 }

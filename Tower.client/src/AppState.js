@@ -10,5 +10,7 @@ export const AppState = reactive({
   profile: {},
   page: 0,
   totalPages: 0,
-  eventFilter: 'all'
+  eventFilter: 'all',
+  attendees: [],
+  accountAttendance: []
 })

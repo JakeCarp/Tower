@@ -1,5 +1,8 @@
 <template>
-  <div class="eventCard card bg-dark text-white row m-3" @click="routeTo">
+  <div
+    class="eventCard card bg-dark text-white row m-3 selectable"
+    @click="routeTo"
+  >
     <img
       :src="eventObj.coverImg"
       class="card-img"
@@ -26,6 +29,7 @@
 
 <script>
 import { useRouter } from 'vue-router'
+import { AppState } from '../AppState'
 export default {
   props: {
     eventObj: {
@@ -38,6 +42,7 @@ export default {
     return {
       router,
       routeTo() {
+        AppState.activeEvent = props.eventObj
         router.push({
           name: "Event",
           params: { id: props.eventObj.id }
