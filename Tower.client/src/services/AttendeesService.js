@@ -11,11 +11,14 @@ class AttendeesService {
         }
         const res = await api.post('api/attendees', body)
         logger.log(res.data)
-
+        eventService.getAttendees(eventId)
+        accountService.getAttendance(accountId)
     }
     async unattend(id, eventId) {
         const res = await api.delete('api/attendees/' + id)
         logger.log('unattended')
+        accountService.getAttendance()
+        eventService.getAttendees(eventId)
     }
 }
 export const attendeesService = new AttendeesService()

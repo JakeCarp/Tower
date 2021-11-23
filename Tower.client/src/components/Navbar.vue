@@ -20,7 +20,7 @@
       ></button>
     </div>
     <div class="my-2 my-lg-0 px-3" v-if="user.isAuthenticated">
-      <div class="selectable">
+      <div>
         <img :src="user.picture" alt="user photo" height="40" class="rounded" />
         <span class="mx-3 text-success lighten-30">{{ user.name }}</span>
       </div>

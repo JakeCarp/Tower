@@ -1,15 +1,15 @@
 <template>
   <div
     class="modal fade text-dark"
-    id="createEventModal"
+    id="editEventModal"
     tabindex="-1"
-    aria-labelledby="create event modal"
+    aria-labelledby="edit event modal"
     aria-hidden="true"
   >
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="createEventModalLabel">New Event</h5>
+          <h5 class="modal-title" id="editEventModalLabel">Edit Event</h5>
           <button
             title="close"
             type="button"
@@ -18,8 +18,8 @@
             aria-label="Close"
           ></button>
         </div>
-        <div class="modal-body">
-          <form id="eventForm" @submit.prevent="create" class="row">
+        <div class="modal-body text-dark">
+          <form id="eventForm" @submit.prevent="edit" class="row">
             <div class="mb-3 col-12">
               <label for="eventName" class="form-label">Event Name</label>
               <input
@@ -114,7 +114,7 @@
               class="btn btn-primary"
               data-bs-dismiss="modal"
             >
-              Create Event
+              Save Changes
             </button>
           </form>
         </div>
@@ -125,7 +125,7 @@
 
 
 <script>
-import { ref } from '@vue/reactivity'
+import { computed, reactive, ref } from '@vue/reactivity'
 import { watchEffect } from '@vue/runtime-core'
 import { eventService } from '../services/EventService'
 import Pop from '../utils/Pop'
@@ -135,33 +135,29 @@ import { Modal } from 'bootstrap'
 import { logger } from '../utils/Logger'
 export default {
   props: {
-    eventObj: {
-      type: Object
+    event: {
+      type: Object,
+      required: true
     }
   },
   setup(props) {
+    const activeEvent = computed(() => AppState.activeEvent)
     const router = useRouter()
     const eventData = ref({})
     watchEffect(() => {
-      eventData.value = { ...props.eventObj }
+      eventData.value = { ...props.event }
     })
     return {
+      activeEvent,
       router,
       eventData,
-      async create() {
+      async edit() {
         try {
-          await eventService.createEvent(eventData.value)
-          Pop.toast('Event Created', 'success')
-          router.push({
-            name: 'Event',
-            params: {
-              id: eventData.id
-            }
-          })
-          eventData = {}
-          const modalElem = document.getElementById('createEventModal')
-          Modal.getOrCreateInstance(modalElem).toggle()
-          Offcanvas.getOrCreateInstance(document.getElementById('offcanvas-nav')).toggle()
+          logger.log('Handling Submission')
+          await eventService.editEvent(eventData.value)
+          Pop.toast('Event Edited', 'success')
+          const modalElem = document.getElementById('editEventModal')
+          Modal.getOrCreateInstance(modalElem).hide()
         } catch (error) {
           logger.log(error)
         }

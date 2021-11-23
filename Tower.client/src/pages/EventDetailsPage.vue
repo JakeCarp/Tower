@@ -24,7 +24,10 @@
           <p>{{ eventObj.description }}</p>
         </div>
         <div class="col-12">
-          <div class="row p-3">
+          <div
+            v-if="!eventObj.isCanceled && eventObj.capacity > 0"
+            class="row p-3"
+          >
             <button
               @click="toggleAttend()"
               v-if="!accountAttendance.find((a) => a.eventId === eventObj.id)"
@@ -45,15 +48,21 @@
             </button>
             <p class="text-center mt-3">Spots Left: {{ eventObj.capacity }}</p>
           </div>
+          <div class="bg-danger" v-else>
+            <h4>Unavailable</h4>
+          </div>
         </div>
-        <div class="col-12">
+        <div
+          v-if="eventObj.creatorId === account.id && !eventObj.isCanceled"
+          class="col-12"
+        >
           <button class="btn btn-outline-danger" @click="cancelEvent">
             Cancel Event
           </button>
           <button
             class="btn btn-outline-warning ms-4"
             data-bs-toggle="modal"
-            data-bs-target="#createEventModal"
+            data-bs-target="#editEventModal"
           >
             Edit Event
           </button>
@@ -130,6 +139,7 @@
       </div>
     </div>
   </div>
+  <edit-event-modal :event="eventObj" />
 </template>
 
 
@@ -144,6 +154,7 @@ import Pop from '../utils/Pop'
 import { logger } from '../utils/Logger'
 import { commentsService } from '../services/CommentsService'
 export default {
+
   setup() {
     const commentData = ref('')
     const route = useRoute()
@@ -186,6 +197,13 @@ export default {
         } catch (error) {
           logger.log(error)
           Pop.toast(error.message, 'error')
+        }
+      },
+      async cancelEvent() {
+        try {
+          await eventService.cancelEvent(route.params.id)
+        } catch (error) {
+          logger.error(error)
         }
       },
       async createComment() {
